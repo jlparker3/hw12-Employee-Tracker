@@ -240,12 +240,14 @@ function updateRole() {
             {
                 type: "input",
                 name: "role_id",
-                message: "Which role would you like to update (numerical value 1-8)?"
+                message: "Which role id number would you like to update (numerical value 1-8)?"
             },
             {
+
+                
                 type: "input",
                 name: "employee_id",
-                message: "Which employee do would want to put in the new role (numerical value 1-9)?"
+                message: "What is the employee id number of the employee you want to put in the new role (numerical value 1-9)?"
 
             }
         ])
