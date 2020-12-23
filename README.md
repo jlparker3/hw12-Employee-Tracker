@@ -9,7 +9,7 @@ homework 12 employee tracker
 
 
 # Video of working app
-
+![Demo of working app](hw-12-demo.gif)
 
 # Credits
 
