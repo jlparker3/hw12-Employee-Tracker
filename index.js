@@ -3,7 +3,7 @@ const inquirer = require("inquirer")
 const mysql = require("mysql")
 const ctable = require("console.table")
 
-//COLORS
+//COLORS by https://github.com/bokub/gradient-string
 const gradient = require('gradient-string');
 // Use the rainbow gradient
 
@@ -83,7 +83,7 @@ function beginTracker() {
                     addRoles()
                     break
 
-                case "Upate roles":
+                case "Update roles":
                     updateRole()
                     break
 
@@ -134,7 +134,7 @@ function roleSearch() {
 
 //Function allowing use of adding an employee to the roaster 
 function addEmployee() {
-    
+
     inquirer
     var employeeQ = [
         {
@@ -149,12 +149,12 @@ function addEmployee() {
         },
         {
             type: "input",
-            message: "What is the employee's title?",
+            message: "What is the employee's title (numerical value 1-8)?",
             name: "role_id"
         },
         {
             type: "input",
-            message: "What is the manager id of the new employee?",
+            message: "What is the manager id of the new employee (numerical value 1-9)?",
             name: "manager_id"
         }
 
@@ -216,7 +216,7 @@ function addRoles() {
             name: "salary"
         }
     ]
-    inquirer.prompt(roleQ).then(function(answer){
+    inquirer.prompt(roleQ).then(function (answer) {
         connection.query(
             "INSERT INTO role SET ?",
             {
@@ -224,7 +224,7 @@ function addRoles() {
                 department_id: answer.id,
                 salary: answer.salary
             },
-            function(err,res){
+            function (err, res) {
                 if (err) throw err
                 beginTracker()
             }
@@ -232,29 +232,36 @@ function addRoles() {
     })
 }
 
+//Function that updates roles and assigns an employee to the newly updated role
 function updateRole() {
-    //NOT WORKING have to add connection query and not asking question
 
-    var employee = employeeSearch
-    var employeeChoice = employee.map(index => {
-        id: id;
-    })
-    
     inquirer
-    .prompt({
-        type: "list",
-        name: "role_id",
-        message: "Which role would you like to assign to the employee?",
-        choices: employeeChoice
-    }),
-    connection.query("UPDATE employee SET role_id = ? WHERE id = ?",
+        .prompt([
+            {
+                type: "input",
+                name: "role_id",
+                message: "Which role would you like to update (numerical value 1-8)?"
+            },
+            {
+                type: "input",
+                name: "employee_id",
+                message: "Which employee do would want to put in the new role (numerical value 1-9)?"
 
-        function (err, res) {
-            if (err) throw err
-            console.table(res)
-            beginTracker()
+            }
+        ])
+        .then(function (answer) {
+            connection.query("UPDATE employee SET role_id = ? WHERE id = ?",
+                [
+                    answer.role_id,
+                    answer.employee_id
+                ],
+                function (err, res) {
+                    if (err) throw err
+                    console.table(res)
+                    console.log(res.affectedRows +  " row " + "updated successfully!")
+                   
+                })
+                beginTracker()
         }
-    )
-   
+        )
 }
-
